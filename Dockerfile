@@ -1,4 +1,5 @@
-ARG GO_VERSION=1.23
+# Shuffle's fork requires the patched toolchain; see SECURITY_FORK.md.
+ARG GO_VERSION=1.27.3
 FROM golang:${GO_VERSION} AS build
 
 WORKDIR /app
@@ -12,7 +13,7 @@ RUN go mod download
 # build the executable
 COPY cmd ./cmd
 ENV CGO_ENABLED=0
-RUN go build
+RUN go build -mod=readonly -trimpath
 
 # create super thin container with the binary only
 FROM scratch

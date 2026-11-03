@@ -7,6 +7,11 @@
 </p>
 <br />
 
+This is Shuffle's security-maintenance fork, version `1.21.1-shuffle.1`.
+It preserves the upstream generator and golden-output contract while updating
+the Go toolchain and vulnerable dependencies. See [SECURITY_FORK.md](SECURITY_FORK.md)
+for the rationale, validation requirements, and criteria for returning upstream.
+
 ## What is this?
 
 [Atlantis](https://runatlantis.io) is an awesome tool for Terraform pull request automation. Each repo can have a YAML config file that defines Terraform module dependencies, so that PRs that affect dependent modules will automatically generate `terraform plan`s for those modules.
