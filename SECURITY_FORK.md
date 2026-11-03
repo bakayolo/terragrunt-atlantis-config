@@ -5,6 +5,10 @@ project names, environment filtering, and dependency detection are part of the
 Atlantis deployment contract. This is a dependency-maintenance fork, not a
 replacement implementation of the generator.
 
+The maintained source is the `bena/codex/security-dependencies` branch of
+https://github.com/bakayolo/terragrunt-atlantis-config. The original personal
+fork's master branch is preserved; consumers must pin the tested commit.
+
 As of 2026-11-02, upstream's latest published binary is v1.21.1 from October
 2025. Trivy 0.70.0 reports 55 fixable HIGH and two CRITICAL findings in that
 official ARM64 binary. The critical findings include CVE-2026-33186 in gRPC
@@ -27,6 +31,14 @@ Before updating the image pin, run the complete upstream test suite and its
 golden-output checks, build the Linux ARM64 binary, and scan that binary with
 the image's Trivy policy. The complete image must also pass its existing
 vulnerability, signing, and attestation checks before promotion.
+
+Validation for 1.21.1-shuffle.1: all 63 upstream tests passed on Go 1.27.3,
+with no changes to the golden fixtures. The cross-compiled Linux ARM64 binary
+passes Trivy 0.70.0 with zero fixable HIGH/CRITICAL findings, compared with
+55 HIGH and two CRITICAL findings in the official upstream ARM64 binary.
+With read-only AWS credentials, the fork also generates byte-identical config
+to official v1.21.1 for all 24 Shuffle US dev/us-west-2 projects, using the
+server's filter, project naming, autoplan, and parallelism flags.
 
 Return to an official upstream release when it contains the dependency and Go
 toolchain fixes, passes the same scan, and preserves the tested generator

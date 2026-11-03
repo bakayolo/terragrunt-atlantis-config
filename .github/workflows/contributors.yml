@@ -5,6 +5,8 @@ on:
       - master
 jobs:
   contributors:
+    # The fork must not open contributor-update PRs or notify upstream owners.
+    if: github.repository == 'transcend-io/terragrunt-atlantis-config'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

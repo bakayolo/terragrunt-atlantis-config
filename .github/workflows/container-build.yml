@@ -16,6 +16,9 @@ env:
 
 jobs:
   build_and_push:
+    # Shuffle builds the pinned fork inside its signed Atlantis image pipeline.
+    # Do not inherit upstream's independent container publication in the fork.
+    if: github.repository == 'transcend-io/terragrunt-atlantis-config'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the latest SHA for this branch

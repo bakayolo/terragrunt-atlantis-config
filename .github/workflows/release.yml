@@ -7,6 +7,8 @@ on:
 
 jobs:
   create-release:
+    # Fork builds are versioned and signed through the Atlantis image pipeline.
+    if: github.repository == 'transcend-io/terragrunt-atlantis-config'
     name: Create Release
     runs-on: "ubuntu-latest"
 
