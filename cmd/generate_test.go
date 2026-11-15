@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"os"
@@ -142,6 +143,30 @@ func TestNotIgnoringParentTerragrunt(t *testing.T) {
 		filepath.Join("..", "test_examples", "with_parent"),
 		"--ignore-parent-terragrunt=false",
 	})
+}
+
+func TestIncludedParentIsCreatedAfterChild(t *testing.T) {
+	if err := resetForRun(); err != nil {
+		t.Fatal(err)
+	}
+	ignoreParentTerragrunt = false
+	root, err := filepath.Abs(filepath.Join("..", "test_examples", "with_parent"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	gitRoot = root
+
+	child, err := createProject(context.Background(), filepath.Join(root, "child", "terragrunt.hcl"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.NotNil(t, child)
+
+	parent, err := createProject(context.Background(), filepath.Join(root, "terragrunt.hcl"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.NotNil(t, parent, "processing a child first must not suppress its parent project")
 }
 
 func TestEnablingAutoplan(t *testing.T) {

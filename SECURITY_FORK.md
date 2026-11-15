@@ -16,10 +16,12 @@ and CVE-2025-68121 in Go's TLS implementation. Official v1.20.0, v1.19.0, and
 v1.18.0 binaries also fail the same scan, so downgrading does not resolve it.
 
 The fork pins Go 1.27.3 and updates vulnerable dependencies in go.mod and
-go.sum. Generator implementation and existing golden files remain unchanged.
+go.sum. Existing golden files remain unchanged. Version 1.21.1-shuffle.2 also fixes an
+included-parent cache race: when parent projects are enabled, processing a child
+first must not mark its parent as skipped.
 The module path stays upstream-compatible because the code imports its own
 packages using that path; source provenance comes from the pinned fork commit.
-The reported version is 1.21.1-shuffle.1 so the result is identifiable as a
+The reported version is 1.21.1-shuffle.2 so the result is identifiable as a
 Shuffle build rather than an official upstream binary.
 
 The Atlantis image builds this source in a separate native builder stage and
@@ -43,3 +45,9 @@ server's filter, project naming, autoplan, and parallelism flags.
 Return to an official upstream release when it contains the dependency and Go
 toolchain fixes, passes the same scan, and preserves the tested generator
 output. Until then, maintain changes as reviewable commits in this fork.
+
+Validation for the parent-cache correction: a deterministic child-first
+regression fails on the previous pinned source and passes with the fix. All 64
+tests, including the unchanged golden-output checks, pass ten consecutive runs
+on Go 1.27.3. The default behavior still skips parent projects; the correction
+only applies when `--ignore-parent-terragrunt=false` enables them.
