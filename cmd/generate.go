@@ -145,7 +145,9 @@ func getDependencies(ctx *config.ParsingContext, path string) ([]string, error) 
 		dependencies := []string{}
 		if len(includes) > 0 {
 			for _, includeDep := range includes {
-				getDependenciesCache.set(includeDep.Path, getDependenciesOutput{nil, err})
+				if ignoreParentTerragrunt {
+					getDependenciesCache.set(includeDep.Path, getDependenciesOutput{nil, nil})
+				}
 				dependencies = append(dependencies, includeDep.Path)
 			}
 		}
